@@ -1,26 +1,20 @@
 import fastify from 'fastify'
-import { PrismaClient } from '@prisma/client'
 import { z } from 'zod'
+import { createSurvey } from './routes/create-survey'
+import { getSurvey } from './routes/get-survey'
+import { voteOnSurvey } from './routes/vote-on-survey'
+import cookie from '@fastify/cookie'
 
 const app = fastify()
 
-const prisma = new PrismaClient()
-
-app.post('/votings', async (request, reply) => {
-  const createVotingBody = z.object({
-    title: z.string()
-  })
-
-  const { title } = createVotingBody.parse(request.body)
-
-  const voting = await prisma.voting.create({
-    data: {
-      title,
-    }
-  })
-
-  return reply.status(201).send({ votingId: voting.id })
+app.register(cookie, {
+  secret: "votes-project-backend",
+  hook: 'onRequest',
 })
+
+app.register(createSurvey)
+app.register(getSurvey)
+app.register(voteOnSurvey)
 
 app.listen({ port: 3333 }).then(() => {
   console.log('HTTP Server running! ')

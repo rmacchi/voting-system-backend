@@ -1,9 +1,9 @@
 -- CreateTable
-CREATE TABLE "Voting" (
+CREATE TABLE "Survey" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "Voting_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Survey_pkey" PRIMARY KEY ("id")
 );

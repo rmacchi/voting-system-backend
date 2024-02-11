@@ -7,9 +7,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Voting {
+model Survey {
   id        String   @id @default(uuid())
   title     String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+
+  options SurveyOption[]
+  votes   Vote[]
+}
+
+model SurveyOption {
+  id       String @id @default(uuid())
+  title    String
+  surveyId String
+
+  survey Survey @relation(fields: [surveyId], references: [id])
+  votes  Vote[]
+}
+
+model Vote {
+  id             Int      @id @default(autoincrement())
+  sessionId      String
+  surveyOptionId String
+  surveyId       String
+  createdAt      DateTime @default(now())
+
+  surveyOption SurveyOption @relation(fields: [surveyOptionId], references: [id])
+  survey       Survey       @relation(fields: [surveyId], references: [id])
+
+  @@unique([sessionId, surveyId])
 }
